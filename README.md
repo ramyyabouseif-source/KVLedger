@@ -2,7 +2,29 @@
 
 Educational **micro-lending ledger** on the **EVM**: register loans and repayments on-chain with borrower identities represented as **`bytes32` hashes** (so real-world IDs are not stored in plain text on the blockchain). Includes a **Next.js** web app that connects with **MetaMask** and uses **ethers.js v6** to call the contracts.
 
-> **Scope:** This is a learning MVP, not production lending software. There is **no** custodial wallet, credit scoring, or legal compliance layer. **Deploy contracts and use wallets only on test networks or local nodes** unless you fully understand the risks.
+> [!WARNING]
+> **Educational Use Only**
+>
+> This is a **learning MVP**, not production-ready lending software:
+> - ❌ No KYC/AML compliance
+> - ❌ No custodial wallet or payment processing
+> - ❌ No legal loan agreement enforcement
+> - ❌ No credit scoring or risk assessment
+>
+> **Deploy only on testnets or local nodes.** Using real funds requires legal, regulatory, and security expertise beyond this codebase.
+
+---
+
+## Why this project?
+
+This MVP demonstrates:
+
+- **Transparency** — All loan flows are publicly verifiable on-chain.
+- **Privacy** — Borrower identities are hashed; plaintext names or IDs are not written to the chain (still avoid sensitive data in off-chain forms if you need stronger privacy).
+- **Educational** — Learn Solidity, smart contract deployment, and Web3 integration by building something concrete.
+- **Ledger, not a bank account** — The contract does not custody ETH or tokens; it records loan data. The **admin** address controls on-chain writes, which is separate from “non-custodial” in the user-wallet sense.
+
+Perfect for learning blockchain fundamentals or prototyping micro-finance transparency tools.
 
 ---
 
@@ -13,21 +35,23 @@ Educational **micro-lending ledger** on the **EVM**: register loans and repaymen
 - **Admin-only writes** — `createLoan`, `recordRepayment`, and `markAsDefaulted` are restricted to the contract **admin** (the deployer by default).
 - **Events** — `LoanCreated`, `RepaymentRecorded`, `LoanCompleted`, `LoanDefaulted` for indexing and transparency.
 - **Multiple contract variants** — baseline `LoanRegistry`, plus optimized and **OpenZeppelin**-based secure variants for comparison and gas experiments.
-- **Web UI** — “Koinonia Ventures” style landing page plus a **loan creation** flow for the admin wallet.
+- **Web UI** — "Koinonia Ventures" style landing page plus a **loan creation** flow for the admin wallet.
 
 ---
 
 ## Tech stack
 
-| Layer | Technology                                       |
-| ----- | ------------------------------------------------ |
-| Contracts | Solidity `^0.8.19`, Hardhat                  |
+| Layer | Technology |
+| ----- | ---------- |
+| Contracts | Solidity `^0.8.19`, Hardhat |
 | Libraries | OpenZeppelin (secure variant), Hardhat toolbox |
-| Frontend  | Next.js 16, React 18, TypeScript               |
+| Frontend | Next.js 16, React 18, TypeScript |
 | Wallet / RPC | **ethers.js v6**, MetaMask (`window.ethereum`) |
-| Networks (configured) | **Local Hardhat** (`localhost:8545`), **Sepolia** |
+| Networks | **Local Hardhat** (`localhost:8545`, chain ID **31337** for the default node); **Sepolia** supported in the frontend via env (see below) |
 
 The frontend does **not** use Wagmi or Viem. There is **no** Supabase or other borrower database in this repo—privacy is handled **on-chain** via hashed identifiers; any mapping from hash to real identity would be **off-chain** and is **not** implemented here.
+
+**Sepolia vs Hardhat:** The app (`contractAddresses.ts`, `NETWORK_CONFIG`) is wired to point at a **Sepolia** deployment using `NEXT_PUBLIC_SEPOLIA_*` and an RPC URL. **`hardhat.config.js` only defines the in-process `hardhat` network and `localhost`.** To deploy contracts to Sepolia, add a `sepolia` network (RPC URL and funded deployer key) to Hardhat yourself, then set the deployed address in `.env.local`.
 
 ---
 

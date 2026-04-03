@@ -38,6 +38,22 @@ Perfect for learning blockchain fundamentals or prototyping micro-finance transp
 - **Web UI** — "Koinonia Ventures" style landing page plus a **loan creation** flow for the admin wallet.
 
 ---
+## What you'll learn
+
+By building and deploying this project, you'll gain hands-on experience with:
+
+- Writing and deploying Solidity smart contracts
+- Hardhat development environment and testing
+- ethers.js v6 for contract interaction
+- MetaMask wallet integration
+- Next.js Web3 app architecture
+- On-chain vs. off-chain data design decisions
+- Privacy-preserving patterns (hashed identifiers)
+- Event-driven blockchain architecture
+
+**Time investment:** 2-4 hours for local deployment, 4-8 hours to fully understand the codebase
+
+---
 
 ## Tech stack
 
@@ -49,10 +65,12 @@ Perfect for learning blockchain fundamentals or prototyping micro-finance transp
 | Wallet / RPC | **ethers.js v6**, MetaMask (`window.ethereum`) |
 | Networks | **Local Hardhat** (`localhost:8545`, chain ID **31337** for the default node); **Sepolia** supported in the frontend via env (see below) |
 
-The frontend does **not** use Wagmi or Viem. There is **no** Supabase or other borrower database in this repo—privacy is handled **on-chain** via hashed identifiers; any mapping from hash to real identity would be **off-chain** and is **not** implemented here.
+There is **no** Supabase or other borrower database in this repo. Privacy is handled **on-chain** via hashed identifiers; any mapping from hash to real identity would be **off-chain** and is **not** implemented here.
 
-**Sepolia vs Hardhat:** The app (`contractAddresses.ts`, `NETWORK_CONFIG`) is wired to point at a **Sepolia** deployment using `NEXT_PUBLIC_SEPOLIA_*` and an RPC URL. **`hardhat.config.js` only defines the in-process `hardhat` network and `localhost`.** To deploy contracts to Sepolia, add a `sepolia` network (RPC URL and funded deployer key) to Hardhat yourself, then set the deployed address in `.env.local`.
-
+**Sepolia vs Hardhat:**
+- The frontend is pre-configured to connect to Sepolia (via NEXT_PUBLIC_SEPOLIA_* environment variables)
+- hardhat.config.js currently only defines local networks (hardhat and localhost)
+- To deploy to Sepolia: You must manually add a sepolia network configuration to hardhat.config.js (including RPC URL and funded deployer private key), deploy the contract, then update NEXT_PUBLIC_SEPOLIA_LOAN_REGISTRY in .env.local with the deployed address
 ---
 
 ## Repository layout
@@ -210,12 +228,11 @@ Ideas that are **not** in the current codebase but match common next steps:
 
 ---
 
-## License
-
-See `loan-ledger-mvp/package.json` (ISC) for the root package metadata. Add a top-level `LICENSE` file if you want explicit terms on GitHub.
-
----
-
 ## Acknowledgements
 
-Built as a **transparent micro-lending** demo using **Solidity**, **Hardhat**, and a **Next.js** frontend with **ethers.js**.
+Built as an educational tool for learning blockchain development through a real-world use case: transparent micro-lending.
+
+**Tech stack:** Solidity, Hardhat, Next.js, ethers.js v6  
+**Intended audience:** Developers learning Web3, non-profits exploring blockchain transparency, anyone learning about smart contracts
+
+Not affiliated with any financial institution. Contributions and feedback welcome!
